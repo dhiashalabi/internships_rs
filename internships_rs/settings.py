@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-teaq$sruz35ppq%3e_r2-sm_l)2cq#y1$4n@upv0tyzlf6ba=q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "internships-rs-wmiok.ondigitalocean.app"]
 
 
 # Application definition
