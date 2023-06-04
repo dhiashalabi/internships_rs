@@ -1,0 +1,53 @@
+{% load i18n static %}
+
+
+{% if internships %}
+<div class="row row-cols-auto">
+    {% for internship in internships %}
+        <div class="col col-lg-4 mt-4">
+            <div class="card rounded-5 p-2" style="border-left: 3mm solid #8b9bbc">
+                <div class="card-body">
+                    <div class="d-flex flex-row justify-content-between">
+                        <h5 class="card-title text-inter-dark-blue fw-bolder fs-4 mt-2 text-capitalize">{{ internship.company }}
+                            {% if user.is_authenticated and bookmark == "True" %}
+                                <span role="button" class="internship-item" data-id="{{ internship.id }}">
+                                    {% if internship.is_interested %}
+                                    <i class="fa-solid fa-bookmark"></i>
+                                    {% else %}
+                                    <i class="fa-regular fa-bookmark"></i>
+                                    {% endif %}
+                                </span>
+                            {% endif %}
+                        </h5>
+                        {% if internship.image %}
+                            <img src="{{ internship.image.url }}" class="card-img-top internship-image" alt="{{ internship.title }}">
+                        {% else %}
+                            <img src="{% static 'internship.png' %}" class="card-img-top internship-image" alt="{{ internship.title }}">
+                        {% endif %}
+                    </div>
+                    <div class="d-flex flex-row justify-content-between">
+                        <p class="card-title text-inter-dark-blue fs-4 mt-2 text-capitalize">{{ internship.title }} |</p>
+                        <p class="card-title text-inter-dark-blue fs-4 mt-2 ps-1 text-capitalize">{{ internship.internship_category }}</p>
+                    </div>
+                    <p class="card-text">{{ internship.description|slice:":90" }}</p>
+                    <div class="row">
+                        <div class="col-auto me-auto">
+                            {% if internship.url %}
+                            <a href="{{ internship.url }}" class="btn bg-inter-dark-blue text-white" target="_blank">{% trans 'More Details' %}</a>
+                            {% endif %}
+                        </div>
+                        <div class="col-auto">
+                            <p class="card-title text-inter-dark-blue fs-4 fw-bolder">{{ internship.city }} <i class="fa-solid fa-location-dot"></i></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{%else%}
+<div class="py-5 px-5 text-center">
+    <i class="fa-solid fa-database text-white" style="font-size: 100px;"></i>
+    <p class="text-white fs-1 mt-4">{% trans 'No Data Found' %}</p>
+</div>
+{% endif %}

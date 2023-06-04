@@ -1,0 +1,49 @@
+{% load i18n static %}
+
+
+{% if recommendations %}
+<div class="row row-cols-auto">
+    {% for recommendation in recommendations %}
+        <div class="col col-lg-4 mt-4">
+            <div class="card rounded-5 p-2 h-100" style="border-left: 3mm solid #8b9bbc">
+                <div class="card-body">
+                    <div class="d-flex flex-row justify-content-between">
+                        <h5 class="card-title text-inter-dark-blue fw-bolder fs-4 mt-2 text-capitalize">{{ recommendation.id }}. {{ recommendation.company_name }}
+                            {% if user.is_authenticated %}
+                                <span role="button" class="recommendation-item" data-id="{{ recommendation.id }}">
+                                    {% if recommendation.is_interested %}
+                                        <i class="fa-solid fa-bookmark"></i>
+                                    {% else %}
+                                        <i class="fa-regular fa-bookmark"></i>
+                                    {% endif %}
+                                </span>
+                                <span role="button" class="recommendation-item-save-file" data-id="{{ recommendation.id }}">
+                                    <i class="fa-sharp fa-solid fa-floppy-disk"></i>
+                                </span>
+                            {% endif %}
+                        </h5>
+                        {% if recommendation.image %}
+                            <img src="{{ recommendation.image }}" class="card-img-top internship-image" alt="{{ recommendation.title }}">
+                        {% else %}
+                            <img src="{% static 'internship.png' %}" class="card-img-top internship-image" alt="{{ recommendation.title }}">
+                        {% endif %}
+                    </div>
+                    <div class="d-flex flex-row justify-content-between">
+                        <p class="card-title text-inter-dark-blue fs-4 mt-2 text-capitalize">{{ recommendation.title }}</p>
+                    </div>
+                    <p class="card-text">{{ recommendation.details|slice:":90" }}</p>
+                    <div class="d-flex flex-row justify-content-between">
+                        <a href="{{ recommendation.url }}" class="btn bg-inter-dark-blue text-white" target="_blank">{% trans 'More Details' %}</a>
+                        <p class="card-title text-inter-dark-blue fs-4 fw-bolder text-capitalize">{{ recommendation.loc }} <i class="fa-solid fa-location-dot"></i></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{%else%}
+<div class="py-5 px-5 text-center">
+    <i class="fa-solid fa-database text-white" style="font-size: 100px;"></i>
+    <p class="text-white fs-1 mt-4">{% trans 'No Data Found' %}</p>
+</div>
+{% endif %}

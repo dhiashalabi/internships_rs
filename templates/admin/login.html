@@ -1,0 +1,67 @@
+{% extends "site/base_site.html" %}
+{% load i18n static %}
+{% block title %}{% trans 'Sign In' %}{% endblock %}
+{% block navbar %}
+<nav class="navbar bg-inter p-3">
+    <div class="container-fluid justify-content-center">
+        <a class="navbar-brand text-white fs-1 text-uppercase" href="{% url 'index' %}">
+            <i class="fa-solid fa-circle-check"></i> 
+            Internship
+        </a
+        >
+    </div>
+</nav>
+{% endblock %}
+{% block breadcrumbs %}{% endblock %}
+{% block content %}
+<div class="m-auto mb-5" style="max-width: 550px;">
+    <div class="card p-5 rounded-5 bg-inter-light">
+        <div class="card-body">
+            <p class="fs-1 text-center fw-bolder text-inter-dark-blue">{% trans 'Sign In' %}</p>
+            <form action="{{ app_path }}" method="POST" id="login-form">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                <div class="alert alert-danger" role="alert">
+                    <i class="fa-solid fa-triangle-exclamation fs-4"></i> {{ error }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                <div class="form-outline mb-4">
+                    <label class="form-label text-white fs-5" for="id_username">{% trans 'Username' %}</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-user-shield text-inter-dark-blue"></i></span>
+                        <input type="text" name="username" id="id_username" placeholder="{% trans 'Username' %}" class="form-control form-control-lg"
+                        required />
+                    </div>
+                </div>
+                <div class="form-outline mb-4">
+                    <label class="form-label text-white fs-5" for="id_password">{% trans 'Password' %}</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-lock text-inter-dark-blue"></i></span>
+                        <input type="password" name="password" id="id_password" placeholder="{% trans 'Password' %}"
+                        class="form-control form-control-lg" required />
+                    </div>
+                </div>
+                <div class="d-flex d-flex justify-content-between">
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" type="checkbox" value="" id="reemember-me" />
+                        <label class="form-check-label text-white fw-bolder" for="remember-me"> {% trans 'Remember me' %}</label>
+                    </div>
+                    <a class="btn btn-link text-inter-dark-blue fw-bolder">{% trans 'Forgot password?' %}</a>
+                </div>
+                <div class="d-flex flex-column justify-content-center mt-4">
+                    <div class="d-grid gap-2 col-10 mx-auto">
+                        <button type="submit" class="btn bg-inter-dark-blue text-white fs-3 rounded-5">{% trans 'Sign In' %}</button>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <p class="fs-5 text-white">{% trans 'Don\'t have an account?' %}</p>
+                        <a class="btn btn-link text-inter-dark-blue fw-bolder" href="{% url 'signup' %}">{% trans 'Sign Up' %}</a>
+                    </div>
+                </div>
+        </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block footer %} {% include 'site/include/footer.html' %}{% endblock %}

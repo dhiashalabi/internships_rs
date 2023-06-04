@@ -1,0 +1,11 @@
+
+{% extends 'site/base_site.html' %}
+{% load i18n static %}
+{% block title %}{% trans 'Home' %}{% endblock %}
+{% block navbar %}{% include 'site/include/navbar.html' %}{% endblock %}
+{% block content %}
+    <h1 class="mb-4 text-white text-uppercase fw-bolder">{% trans 'Internship Training Site' %}</h1>
+    <h1 class="mb-4 text-white text-capitalize">{% trans 'Your First Step to the Feture' %} <i class="fa-solid fa-chalkboard-user"></i></h1>
+    {% include 'site/include/internship.html' with bookmark="True" %}
+{% endblock %}
+{% block footer %} {% include 'site/include/footer.html' %}{% endblock %}

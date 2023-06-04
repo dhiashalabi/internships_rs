@@ -1,0 +1,87 @@
+{% load i18n static %}
+
+<div>
+    <form action="{% url 'recommends' %}" method="GET" id="login-form">
+        <div class="row">
+            <div class="col">
+                <div class="d-flex flex-column mb-3">
+                    <div class="p-2 text-white text-center fw-bolder border-bottom" style="margin:10px">{% trans 'Location' %}</div>
+                    <div class="p-2">
+                        <select class="form-select" name="rs_city" id="id_city" aria-label="Location">
+                            <option value="All" selected>All</option>
+                            {% for city in cities %}
+                                <option value="{{ city.name }}">{{ city.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="d-flex flex-column mb-3">
+                    <div class="p-2 text-white text-center fw-bolder border-bottom" style="margin:10px">{% trans 'Category' %}</div>
+                    <div class="p-2">
+                        <select class="form-select" name="rs_category" id="id_category" aria-label="Category">
+                            <option value="All" selected>All</option>
+                            {% for category in internship_categories %}
+                                <option value="{{ category.name }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="d-flex flex-column mb-3">
+                    <div class="p-2 text-white text-center fw-bolder border-bottom" style="margin:10px">{% trans 'Type' %}</div>
+                    <div class="p-2">
+                        <select class="form-select" name="rs_internship_type" id="id_internship_type" aria-label="Type">
+                            <option value="All" selected>All</option>
+                            {% for internship_type in internship_types %}
+                                <option value="{{ internship_type.name }}">{{ internship_type.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="d-flex flex-column mb-3">
+                    <div class="p-2 text-white text-center fw-bolder border-bottom" style="margin:10px">{% trans 'Search' %}</div>
+                    <div class="p-2">
+                        <input type="search" class="form-control" name="rs_search" id="id_search" value="{{ request.GET.search }}">
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="d-flex flex-column mb-3">
+                    <div class="p-2 text-white text-center fw-bolder border-bottom" style="margin:10px">{% trans 'Action' %}</div>
+                    <div class="p-2">
+                        <div class="dropdown">
+                            <button class="btn btn-light dropdown-toggle w-100" type="button" id="dropdownMenuAction" data-bs-toggle="dropdown" aria-expanded="false">
+                                {% trans 'Actions' %}
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuAction">
+                                <li><button type="submit" class="dropdown-item">Submit</button></li>
+                                <li><a class="dropdown-item recommended-rs" href="#">{% trans 'Recommended Internships' %}</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    $(document).ready(function() {
+        const city = '{{ request.GET.rs_city }}';
+        const category = '{{ request.GET.rs_category }}';
+        const internship_type = '{{ request.GET.rs_internship_type }}';
+        let search = '{{ request.GET.rs_search }}';
+        if (city !== 'None' && city !== "")
+            $('#id_city').val(city);
+        if (category != 'None' && category != "")
+            $('#id_category').val(category);
+        if (internship_type != 'None' && internship_type != "")
+            $('#id_internship_type').val(internship_type);
+        if (search != 'None' && search != "")
+            $('#id_search').val(search);
+    });
+</script>

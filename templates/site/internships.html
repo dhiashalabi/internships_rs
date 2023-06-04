@@ -1,0 +1,11 @@
+
+{% extends 'site/base_site.html' %}
+{% load i18n static %}
+{% block title %}{% trans 'Home' %}{% endblock %}
+{% block navbar %}{% include 'site/include/navbar.html' %}{% endblock %}
+{% block content %}
+    {% include 'site/include/rs.html' %}
+    <h1 class="text-white fw-bolder">{{ title }}</h1>
+    {% include 'site/include/internship.html' with internships=internships bookmark="True" %}
+{% endblock %}
+{% block footer %} {% include 'site/include/footer.html' %}{% endblock %}

@@ -1,0 +1,160 @@
+{% load i18n static %}
+<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:'en-us' }}" dir="{{ LANGUAGE_BIDI|yesno:'rtl,ltr,auto' }}">
+
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'site/styles.css' %}">
+    <script src="{% static 'jquery/jquery-3.7.0.min.js' %}"></script>
+    {% block extrastyle %}{% endblock %}
+    {% if LANGUAGE_BIDI %}
+    <link rel="stylesheet" href="{% block stylesheet_rtl %}{% static 'bootstrap/css/bootstrap.rtl.min.css' %}{% endblock %}">
+    {%endif %}
+    {% block extrahead %}{% endblock %}
+    {% block responsive %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% endblock %}
+    {% block blockbots %}
+    <meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
+</head>
+
+<body class="{% block bodyclass %}{% endblock %}">
+    {% block navbar %} {% endblock %}
+    {% block breadcrumbs %} {% endblock %}
+    <div class="container mb-5 mt-5 p-4">{% block content %}{% endblock %}</div>
+    {% block footer %} {% endblock %}
+    <script src="https://kit.fontawesome.com/e367cfbe80.js" crossorigin="anonymous"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script>
+        $('.internship-item').on('click', function () {
+            let internship_id = $(this).attr('data-id');
+            $.ajax({
+                url: "{% url 'user-interest' %}",
+                type: "POST",
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    'internship_id': internship_id,
+                },
+                success: function(data) {
+                    if(data.status === "success"){
+                        var $icon = $('.internship-item[data-id="' + internship_id + '"] i');
+                        if (data.operation === "d") {
+                            $icon.removeClass('fa-solid').addClass('fa-regular');
+                        } else if (data.operation === "a") {
+                            $icon.removeClass('fa-regular').addClass('fa-solid');
+                        }
+                    }
+                    alert(data.message)
+                },
+                error: function(xhr, errmsg, err) {
+                    console.log(xhr.status + ": " + xhr.responseText);
+                }
+            });
+        });
+        $('.recommendation-item').on('click', function () {
+            let recommendation_id = $(this).attr('data-id');
+            $.ajax({
+                url: "{% url 'recommends' %}",
+                type: "POST",
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    'recommendation_id': recommendation_id,
+                },
+                success: function(data) {
+                    if(data.status === "success"){
+                        var $icon = $('.recommendation-item[data-id="' + recommendation_id + '"] i');
+                        if (data.operation === "d") {
+                            $icon.removeClass('fa-solid').addClass('fa-regular');
+                        } else if (data.operation === "a") {
+                            $icon.removeClass('fa-regular').addClass('fa-solid');
+                        }
+                    }
+                    alert(data.message)
+                },
+                error: function(xhr, errmsg, err) {
+                    console.log(xhr.status + ": " + xhr.responseText);
+                }
+            });
+        });
+
+        const download_csv = function (fileName, data) {
+            const blob = new Blob([data], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.setAttribute('href', url)
+            a.setAttribute('download', fileName);
+            a.click()
+        }
+
+        $('.recommendation-item-save-file').on('click', function () {
+            let recommendation_id = $(this).attr('data-id');
+            $.ajax({
+                url: "{% url 'save-file' %}",
+                type: "POST",
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    'recommendation_id': recommendation_id,
+                },
+                success: function(data) {
+                    const user = "{{ user.username }}";
+                    const fileName = `${user}_profile_${recommendation_id}.csv`
+                    download_csv(fileName, data);
+                },
+                error: function(xhr, errmsg, err) {
+                    console.log(xhr.status + ": " + xhr.responseText);
+                }
+            });
+        });
+        $(".recommended-rs").on("click", function (){
+            const id_list = `{{ ids_list }}`;
+            const len_clean_df = `{{ len_clean_df }}`;
+            const ids_list = JSON.parse(id_list.replace(/'/g, '"'));
+            let ids = prompt(`These ids represent the most relevant profiles ${id_list}`, "");
+            while (ids !== null && ids !== "" && ids !== undefined) {
+                if (ids_list.includes(parseInt(ids))) {
+                    break;
+                } else {
+                    ids = prompt(`These ids represent the most relevant profiles ${id_list}`, "");
+                }
+            }
+            let recommendation = prompt(`Please enter the no. of recommended internships you want to make between 1-${len_clean_df}:`, "");
+            while (recommendation !== null && recommendation !== "" && recommendation !== undefined) {
+                if (parseInt(recommendation) <= len_clean_df && parseInt(recommendation) > 0) {
+                    break;
+                } else {
+                    recommendation = prompt(`Please enter the no. of recommended internships you want to make between 1-${len_clean_df}:`, "");
+                }
+            }
+            $.ajax({
+                url: "{% url 'make-recommendation' %}",
+                type: "POST",
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    "index": ids,
+                    'recommendation': recommendation,
+                    "city": "{{ request.GET.rs_city }}",
+                    "category": "{{ request.GET.rs_category }}",
+                    "internship_type": "{{ request.GET.rs_internship_type }}",
+                    "search": "{{ request.GET.rs_search }}",
+                },
+                success: function(data) {
+                    if(data.status){
+                        alert(data.message)
+                    } else {
+                        download_csv("df_recommendations.csv", data)
+                    }
+                },
+                error: function(xhr, errmsg, err) {
+                    console.log(xhr.status + ": " + xhr.responseText);
+                }
+            });
+        });
+    </script>
+    {% block extrascript %}{% endblock %}
+</body>
+
+</html>

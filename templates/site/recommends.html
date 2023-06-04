@@ -1,0 +1,10 @@
+
+{% extends 'site/base_site.html' %}
+{% load i18n static %}
+{% block title %}{% trans 'Recommends RS' %}{% endblock %}
+{% block navbar %}{% include 'site/include/navbar.html' %}{% endblock %}
+{% block content %}
+    {% include 'site/include/rs.html' %}
+    {% include 'site/include/recommend.html' with recommendations=recommendations bookmark="False" %}
+{% endblock %}
+{% block footer %} {% include 'site/include/footer.html' %}{% endblock %}

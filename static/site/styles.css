@@ -1,0 +1,45 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@800&display=swap");
+
+.navbar-brand {
+  font-family: "Open Sans", sans-serif;
+}
+
+.bg-inter {
+  background: linear-gradient(to right, #504b8d, #7289b2);
+}
+
+.bg-inter-reverse {
+  background: linear-gradient(to right, #7289b2, #504b8d);
+}
+
+.bg-inter-light {
+  background: #8b9bbc;
+}
+
+.bg-inter-dark-blue {
+  background: #394185;
+}
+
+.bg-inter-dark-blue:hover {
+  background: #334e8b;
+}
+
+.text-inter-dark-blue {
+  color: #394185;
+}
+
+.internship-image {
+  width: 50px;
+  height: 50px;
+}
+
+select option {
+  margin: 40px;
+  background: rgba(114, 137, 178, 0.6);
+  color: white;
+  text-shadow: 0 1px 0 rgba(114, 137, 178, 0.7);
+}
+
+body {
+  background: linear-gradient(to right, #383f7b, #504b8d, #334e8b, #3c568c);
+}

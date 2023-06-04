@@ -1,0 +1,5 @@
+{% extends 'site/base.html' %}
+
+{% block title %}
+{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Internshipts') }}
+{% endblock %}
