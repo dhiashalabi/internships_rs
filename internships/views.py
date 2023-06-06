@@ -78,7 +78,11 @@ class GetInternshipsView(CreateView):
             title = city.name + " Internships"
             filters = Q(city=self.city)
         elif self.q:
-            filters = Q(title__icontains=self.q)
+            filters = (
+                Q(title__icontains=self.q)
+                | Q(description__icontains=self.q)
+                | Q(internship_category__name__icontains=self.q)
+            )
         internships = Internship.objects.filter(filters) if filters else Internship.objects.all()
         if request.user.is_authenticated:
             for internship in internships:

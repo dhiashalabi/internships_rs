@@ -28,7 +28,11 @@ def get_internship_types(request):
 def get_internships(request):
     filters = Q()
     if request.GET.get("q"):
-        filters &= Q(title__icontains=request.GET.get("q"))
+        filters &= (
+            Q(title__icontains=request.GET.get("q"))
+            | Q(description__icontains=request.GET.get("q"))
+            | Q(internship_category__name__icontains=request.GET.get("q"))
+        )
     internships = Internship.objects.filter(filters)
     if request.user.is_authenticated:
         for internship in internships:

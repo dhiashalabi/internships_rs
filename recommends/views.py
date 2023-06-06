@@ -36,7 +36,7 @@ class RecommendsView(CreateView):
                 "ids_list": clean_df["id"].values.tolist(),
             }
         else:
-            context = {"recommendations": [], "len_clean_df": 0, "ids_list": 0}
+            context = {"recommendations": [], "len_clean_df": 0, "ids_list": []}
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
